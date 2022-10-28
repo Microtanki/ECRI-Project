@@ -1,0 +1,1 @@
+pyInstaller -i ECRI_logo.ico -F ECRI.py
