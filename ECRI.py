@@ -1,6 +1,6 @@
-import time
-import os
-print('Добро пожаловать в ECRI (Easy Custom Recovery Installer)')
+import time # make delays
+import os # for work with shell
+print('Welcome to the ECRI (Easy Custom Recovery Installer)')
 print('''
 ########## ########## ####### #######
 #          #          #     #    #
@@ -10,105 +10,62 @@ print('''
 #          #          #  #       #
 ########## ########## #   ### ####### (4pda.to, Vankinok, https://4pda.to/forum/index.php?showuser=9457591)
 ''')
-os.system("fastboot.exe getvar product")
-var = input('''У вас таблица разделов A-only(ao) или AB(ab)?
+print('Put the recovery.img to the folder with ECRI')
+time.sleep(2)
+os.system("fastboot.exe getvar product") # product: alioth (for example)
+var = input('''What is your partition table(a-only - ao, ab - ab)?
 : ''')
 if var == "ao":
-    print('Выбрано: A-only, следовательно у вас есть раздел recovery')
+    print('Chose: A-only, you have got recovery partition')
     print('')
-    input('''Теперь поместите образ рекавери с именем recovery.img под ваше устройство в папку с ECRI.exe, а после нажмите enter
+    input('''
     ''')
     print('')
     os.system("dir")
     print('')
-    var1 = input('''Вы готовы к прошивке образа? (y/n)
+    var1 = input('''Are you ready flash the image? (y/n)
     : ''')
     print('')
     if var1 == n:
         exit(0)
     if var1 == y:
-        os.system("fastboot.exe flash recovery recovery.img")
+        os.system("fastboot.exe flash recovery recovery.img") # flashing the recovery image
         print('')
-        os.system("fastboot.exe reboot recovery")
+        os.system("fastboot.exe reboot recovery") # rebooting to the recovery
         print('')
-        input("Нажмите enter, чтобы выйти: ")
+        input("Press enter to exit, see you soon choom: ")
 if var == "ab":
     print('''
-    Выбрано: AB, следовательно у вас нет раздела recovery, 
-    а это значит, что рекавери находится в boot образе (в ramdisk)
+    Chose: AB partition table, you haven't recovery partition, 
+    it means the recovery live in boot partititon (in ramdisk)
     ''')
-    print('')
-    input('Теперь поместите образ рекавери с именем recovery.img под ваше устройство в папку с ECRI.exe, а после нажмите enter: ')
     print('')
     os.system("dir")
     print('')
-    var2 = input('''Вы готовы к запуску во временное рекавери? (y/n)
+    var2 = input('''Are you ready boot into the temporary recovery? (y/n)
     : ''')
     print('')
     if var2 == "n":
         exit(0)
     if var2 == "y":
         print('')
-        os.system("fastboot.exe boot recovery.img")
+        os.system("fastboot.exe boot recovery.img") # booting to the temporary recovery
         print('')
-        print('Не отключайте телефон от пк!!!')
+        print('Do not disconnect your phone from computer!!!')
         print('')
-        time.sleep(2)
-        input('Когда телефон будет запущен в рекавери, то нажмите enter')
-        var22 = input('''
-        У вас дата зашифрована? Если не знаете пароль или рекавери не умеет работать
-        с шифрованием вашей версией андроид, то необходимо сделать format data.
-        Хотите сделать format data? (y/n)
-        : 
-        ''')
-        if var22 == "n":
-            print('')
-            os.system("adb.exe devices")
-            print('')
-            input('''
-            Телефон определился? Если нет, то убедитесь, 
-            что компьютер видит телефон, если все ок, то нажмите enter: ''')            
-            print('')
-            os.system("adb.exe push MFP-STABLE-4.1.11.zip /sdcard")
-            print('')
-            os.system("adb.exe push recovery.img /sdcard")
-            print('')
-            os.system("adb.exe shell twrp install /sdcard/MFP-STABLE-4.1.11.zip")
-            print('')
-            os.system("adb.exe shell rm -rf /sdcard/MFPLOGS")
-            print('')
-            os.system("adb.exe shell rm -rf /sdcard/MFP-STABLE-4.1.11.zip")
-            print('')
-            os.system("adb.exe shell rm -rf /sdcard/recovery.img")
-            print('')
-            input('Нажмите enter, чтобы выйти: ') 
-        if var22 == "y":
-            os.system("adb.exe shell twrp format data")
-            print('')
-            os.system("adb.exe reboot bootloader")
-            print('')
-            os.system("fastboot.exe boot recovery.img")
-            print('')
-            print('Не отключайте телефон от пк!!!')
-            print('')
-            time.sleep(2)
-            input('Когда телефон будет запущен в рекавери, то нажмите enter')
-            print('')
-            os.system("adb.exe devices")
-            print('')
-            input('''
-            Телефон определился? Если нет, то убедитесь, 
-            что компьютер видит телефон, если все ок, то нажмите enter: ''')
-            os.system("adb.exe push MFP-STABLE-4.1.11.zip /sdcard")
-            print('')
-            os.system("adb.exe push recovery.img /sdcard")
-            print('')
-            os.system("adb.exe shell twrp install /sdcard/MFP-STABLE-4.1.11.zip")
-            print('')
-            os.system("adb.exe shell rm -rf /sdcard/MFPLOGS")
-            print('')
-            os.system("adb.exe shell rm -rf /sdcard/MFP-STABLE-4.1.11.zip")
-            print('')
-            os.system("adb.exe shell rm -rf /sdcard/recovery.img")
-            print('')
-            input('Нажмите enter, чтобы выйти: ')       
+        os.system("adb.exe wait-for-device") # waiting the device         
+        print('')
+        os.system("adb.exe push MFP-STABLE-4.1.11.zip /sdcard") # putting .zip into the storage
+        print('')
+        os.system("adb.exe push recovery.img /sdcard") # putting recovery image into the storage
+        print('')
+        os.system("adb.exe shell twrp install /sdcard/MFP-STABLE-4.1.11.zip") # Thanks LeeGarChat for this cool script
+        print('')
+        os.system("adb.exe shell rm -rf /sdcard/MFPLOGS") # deleting the logs
+        print('')
+        os.system("adb.exe shell rm -rf /sdcard/MFP-STABLE-4.1.11.zip") # deleting the .zip
+        print('')
+        os.system("adb.exe shell rm -rf /sdcard/recovery.img") # deleting the boot image
+        print('')
+        input('Press enter to exit, see you soon choom: ') # goodbye
+        # Happy pythoning!
