@@ -1,3 +1,10 @@
+ECRI dropped, use this project - https://github.com/Vankinok/UTP-Project
+!!!!!!!
+
+
+
+
+
 # ECRI-Project
 Easy Custom Recovery Installer Project
 # System requirements
